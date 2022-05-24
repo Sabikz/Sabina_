@@ -6,6 +6,7 @@ for i in range(0, random.randint(5, 20)):
     myList.append(random.randint(-100, 100))
     myList.sort
 print(myList)
+# Some changes
 
 # 7) Добавить в конец листа элементы 5, 55
 myList = []
