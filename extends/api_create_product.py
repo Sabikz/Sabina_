@@ -5,13 +5,15 @@ import requests
 class ApiCreateProduct(Api):
     def create_product(self, product_name):
         data = {
-            "arh": False,
-            "asbukaId": "test",
-            "colvirId": "test",
-            "name": product_name,
-            "nameEn": "test",
-            "nameKz": "testkz",
-            "productTypeId": 1,
+            "product": {
+                "arh": False,
+                "asbukaId": "test",
+                "colvirId": "test",
+                "name": product_name,
+                "nameEn": "test",
+                "nameKz": "test",
+                "productTypeId": 1,
+            },
             "selectedParams": [
                 {
                     "paramId": 1,
