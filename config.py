@@ -1,3 +1,0 @@
-
-DOMAIN_LOGIN = "danialz0308"
-DOMAIN_PASSWORD = "Danial1337228!"
