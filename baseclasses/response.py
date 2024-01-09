@@ -7,6 +7,7 @@ class Response:
         self.response = response
         self.response_json = response.json()
         self.response_status = response.status_code
+        self.response_content = response.content
 
     def validate(self, schema):
         if isinstance(self.response_json, list):
@@ -23,4 +24,5 @@ class Response:
             assert self.response_status in status_code, GlobalErrorMessages.WRONG_STATUS_CODE.value
         else:
             assert self.response_status == status_code, GlobalErrorMessages.WRONG_STATUS_CODE.value
+        print("Response content:", self.response_content)
         return self

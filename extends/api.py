@@ -1,4 +1,5 @@
 import requests as requests
+import config
 
 
 class Api:
@@ -13,8 +14,8 @@ class Api:
                              "Authorization": self.token}
 
     def login(self):
-        data = {"domainLogin": "danialz0308",
-                "domainPswd": "Danial1337228!"}
+        data = {"domainLogin": config.DOMAIN_LOGIN,
+                "domainPswd": config.DOMAIN_PASSWORD}
         headers_type = {"Content-Type": "application/json"}
         response = requests.post("https://dev-svc.kmf.kz/api/pfact/admin/auth", headers=headers_type, json=data,
                                  verify=False)
