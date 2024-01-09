@@ -6,5 +6,5 @@ __pycache__/
 
 # Ignore config.py
 
-
-.idea 
+#ignore idea
+.idea/
