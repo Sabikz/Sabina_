@@ -65,3 +65,10 @@ def r_lend_kind():
     refs_Id = [1, 2, 3, 4]
     random_refs_Id = random.choice(refs_Id)
     return random_refs_Id
+
+
+@pytest.fixture()
+def r_line_kind():
+    refs_Id = [1, 2]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id

@@ -4,7 +4,7 @@ import requests
 
 class ApiCreateProduct(Api):
     def create_product(self, product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
-                       r_lend_kind):
+                       r_lend_kind, r_line_kind):
 
         data = {
             "product": {
@@ -48,6 +48,10 @@ class ApiCreateProduct(Api):
                 {
                     "paramId": 9,
                     "refsId": [r_lend_kind]
+                },
+                {
+                    "paramId": 25,
+                    "refsId": [r_line_kind]
                 }
             ]
         }

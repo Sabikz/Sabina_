@@ -1,10 +1,15 @@
-# Ignore IntelliJ IDEA files
-venv
+# Ignore venv
+venv/
 
 # Ignore Python cache files
 __pycache__/
+.pytest_cache
 
 # Ignore config.py
+config.py
 
 #ignore idea
 .idea/
+
+#ignore main
+main.py

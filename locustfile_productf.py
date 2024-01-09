@@ -2,6 +2,7 @@ from locust import HttpUser, task, between, events
 import os
 import config
 
+
 class UserProduct(HttpUser):
     wait_time = between(0.00001, 0.1)
     host = "https://dev-svc.kmf.kz"
