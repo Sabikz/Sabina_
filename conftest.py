@@ -72,3 +72,38 @@ def r_line_kind():
     refs_Id = [1, 2]
     random_refs_Id = random.choice(refs_Id)
     return random_refs_Id
+
+
+@pytest.fixture()
+def r_sm_line():
+    refs_Id = [1, 2, 3, 4, 5, 6]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def r_mn_line():
+    refs_Id = [1, 2, 3, 4]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def r_mn_type():
+    refs_Id = [1, 2, 3, 4]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def r_pa_mtd():
+    refs_Id = [1, 2, 3]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def r_season():
+    refs_Id = [1, 2]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id

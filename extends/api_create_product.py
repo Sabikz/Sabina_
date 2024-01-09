@@ -4,7 +4,7 @@ import requests
 
 class ApiCreateProduct(Api):
     def create_product(self, product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
-                       r_lend_kind, r_line_kind):
+                       r_lend_kind, r_line_kind, r_sm_line, r_mn_line, r_mn_type, r_pa_mtd, r_season):
 
         data = {
             "product": {
@@ -13,7 +13,7 @@ class ApiCreateProduct(Api):
                 "colvirId": "test",
                 "name": product_name,
                 "nameEn": "test",
-                "nameKz": "test",
+                "nameKaz": "test",
                 "productTypeId": 1,
             },
             "selectedParams": [
@@ -52,6 +52,26 @@ class ApiCreateProduct(Api):
                 {
                     "paramId": 25,
                     "refsId": [r_line_kind]
+                },
+                {
+                    "paramId": 12,
+                    "refsId": [r_sm_line]
+                },
+                {
+                    "paramId": 13,
+                    "refsId": [r_mn_line]
+                },
+                {
+                    "paramId": 2,
+                    "refsId": [r_mn_type]
+                },
+                {
+                    "paramId": 22,
+                    "refsId": [r_pa_mtd]
+                },
+                {
+                    "paramId": 10,
+                    "refsId": [r_season]
                 }
             ]
         }
