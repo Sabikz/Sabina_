@@ -11,7 +11,7 @@ class ApiFindProduct(Api):
             "channelId": r_channel,
             "clientTypeId": r_cl_type,
             "creditPurposeId": r_lpur,
-            "creditSum": r_sm_loan,
+            "creditSum": 100000,
             "creditTerm": r_mn_loan,
             "currencyId": r_currency,
             "firmId": r_firm,
@@ -25,7 +25,7 @@ class ApiFindProduct(Api):
             "productSubTypeId": r_lpg,
             "seasonMark": seasonMark,
             "trancheNumber": trancheNumber,
-            "validSince": "10.-1.2024"
+            "validSince": "10.01.2024"
         }
         response = requests.post(f"{self.host}/api/pfact/datahandler/findProduct", headers=self.headers_type,
                                  verify=False, json=data)

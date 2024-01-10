@@ -117,9 +117,8 @@ def seasonMark():
 
 @pytest.fixture()
 def trancheNumber():
-    tranche = [1, 2]
-    tranche.append(None) if random.choice([True, False]) else None
-    return random.choice(tranche)
+    tranche = random.randint(100000, 69000000)
+    return tranche
 
 
 @pytest.fixture()

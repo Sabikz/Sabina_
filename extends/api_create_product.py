@@ -40,6 +40,8 @@ class ApiCreateProduct(Api):
         }
         response = requests.post(f"{self.host}/api/pfact/admin/createProduct", headers=self.headers_type, verify=False,
                                  json=data)
+        assert isinstance(response, requests.Response)
+        print("Response content:", response.text)
         return response
 
 
