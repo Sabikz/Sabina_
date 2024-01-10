@@ -2,11 +2,10 @@ from extends.api import Api
 import requests
 
 
-class ApiCreateProduct(Api):
-    def create_product(self, product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
-                       r_lend_kind, r_line_kind, r_sm_line, r_mn_line, r_mn_type, r_pa_mtd, r_season):
-
-        data = {
+class CommonData:
+    @staticmethod
+    def get_data(product_name):
+        return {
             "product": {
                 "arh": False,
                 "asbukaId": "test",
@@ -15,65 +14,29 @@ class ApiCreateProduct(Api):
                 "nameEn": "test",
                 "nameKaz": "test",
                 "productTypeId": 1,
-            },
-            "selectedParams": [
-                {
-                    "paramId": 1,
-                    "refsId": [r_cl_type]
-                },
-                {
-                    "paramId": 27,
-                    "refsId": [r_channel]
-                },
-                {
-                    "paramId": 5,
-                    "refsId": [r_lpur]
-                },
-                {
-                    "paramId": 4,
-                    "refsId": [r_sm_loan]
-                },
-                {
-                    "paramId": 11,
-                    "refsId": [r_mn_loan]
-                },
-                {
-                    "paramId": 6,
-                    "refsId": [r_currency]
-                },
-                {
-                    "paramId": 7,
-                    "refsId": [r_firm]
-                },
-                {
-                    "paramId": 9,
-                    "refsId": [r_lend_kind]
-                },
-                {
-                    "paramId": 25,
-                    "refsId": [r_line_kind]
-                },
-                {
-                    "paramId": 12,
-                    "refsId": [r_sm_line]
-                },
-                {
-                    "paramId": 13,
-                    "refsId": [r_mn_line]
-                },
-                {
-                    "paramId": 2,
-                    "refsId": [r_mn_type]
-                },
-                {
-                    "paramId": 22,
-                    "refsId": [r_pa_mtd]
-                },
-                {
-                    "paramId": 10,
-                    "refsId": [r_season]
-                }
+            }
+        }
+
+
+class ApiCreateProduct(Api):
+    def create_product(self, product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
+                       r_lend_kind, r_line_kind, r_sm_line, r_mn_line, r_mn_type, r_pa_mtd, r_season, r_lpg,
+                       r_insur_comp, r_pct_loan, r_pct_param):
+
+        selected_params = [
+            {"paramId": param_id, "refsId": [ref_id]}
+            for param_id, ref_id in [
+                (1, r_cl_type), (27, r_channel), (5, r_lpur), (4, r_sm_loan),
+                (11, r_mn_loan), (6, r_currency), (7, r_firm), (9, r_lend_kind),
+                (25, r_line_kind), (12, r_sm_line), (13, r_mn_line), (2, r_mn_type),
+                (22, r_pa_mtd), (10, r_season), (8, r_lpg), (3, r_insur_comp),
+                (15, r_pct_loan), (14, r_pct_param)
             ]
+        ]
+
+        data = {
+            **CommonData.get_data(product_name),
+            "selectedParams": selected_params
         }
         response = requests.post(f"{self.host}/api/pfact/admin/createProduct", headers=self.headers_type, verify=False,
                                  json=data)

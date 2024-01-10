@@ -48,7 +48,7 @@ def r_mn_loan():
 
 @pytest.fixture()
 def r_currency():
-    refs_Id = [1, 2, None]
+    refs_Id = [1, 2,]
     random_refs_Id = random.choice(refs_Id)
     return random_refs_Id
 
@@ -105,5 +105,47 @@ def r_pa_mtd():
 @pytest.fixture()
 def r_season():
     refs_Id = [1, 2]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def seasonMark():
+    season = [True, False]
+    return random.choice(season)
+
+
+@pytest.fixture()
+def trancheNumber():
+    tranche = [1, 2]
+    tranche.append(None) if random.choice([True, False]) else None
+    return random.choice(tranche)
+
+
+@pytest.fixture()
+def r_lpg():
+    refs_Id = [1, 2, 3, 4]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def r_insur_comp():
+    refs_Id = [1, 2, 15, 14, 12, 13, 18, 19, 2, 3, 4]
+    refs_Id.append(None) if random.choice([True, False]) else None
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def r_pct_loan():
+    refs_Id = [1, 2, 3, 4, 5, 6, 13, 12, 20, 21]
+    random_refs_Id = random.choice(refs_Id)
+    return random_refs_Id
+
+
+@pytest.fixture()
+def r_pct_param():
+    refs_Id = [1, 2, 3, 4, 5, 6, 7, 8]
     random_refs_Id = random.choice(refs_Id)
     return random_refs_Id
