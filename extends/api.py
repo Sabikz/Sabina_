@@ -1,5 +1,4 @@
 import requests as requests
-import config
 import os
 from dotenv import load_dotenv
 

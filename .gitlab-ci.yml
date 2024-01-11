@@ -1,0 +1,75 @@
+variables:
+  TG_USERS: "" #@bigbabydake
+  SERVICE_NAME: "qa.productfactory"
+  GIT_CLEAN_FLAGS: none
+  SEARCH_IMAGE: "image_result"
+  SEARCH_ERROR: "error_result"
+
+stages:
+  - requirements
+  - image_check
+  - qa_tests
+  - notify
+
+build_python_image:
+  stage: requirements
+  image: docker:git
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger"'
+      when: never
+    - changes:
+      - requirements.txt
+  services:
+    - docker:dind
+  script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD https://registry.kmf.kz/
+    - docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest .
+    - docker push registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest;
+
+image_check:
+  stage: image_check
+  image: docker:git
+  services:
+    - docker:dind
+  script:
+    - docker search registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest > $SEARCH_IMAGE
+    - if grep -q "python" $SEARCH_IMAGE; then echo "image already exists"; else
+        docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest . &&
+        docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD https://registry.kmf.kz/ &&
+        docker push registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest;
+      fi
+
+prechecking_status:
+  stage: qa_tests
+  image: registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest
+  script:
+    - pytest -s -v ./tests/ | tee $SEARCH_ERROR
+    - if grep -q "ERROR_FOR_DEVOPS" $SEARCH_ERROR; then echo "Houston, we have a problem..."; exit 1; else echo "No errors were found!"; fi
+
+#postchecking_status:
+#  stage: qa_tests
+#  image: registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest
+#  needs: ["prechecking_status"]
+#  script:
+#    - pytest -s -v ./locustfile_product.py --html=report_acpr_ind.html --self-contained-html --capture=tee-sys | tee $SEARCH_ERROR
+#    - if grep -q "ERROR_FOR_DEVOPS" $SEARCH_ERROR; then echo "Houston, we have a problem..."; exit 1; else echo "No errors were found!"; fi
+#    - ls -la
+#    - curl -F "document=@report_acpr_ind.html" https://api.telegram.org/bot$ANDROID_EMA_BOT_TOKEN/sendDocument?chat_id=$QA_CHAT_ID
+
+telegram:
+   stage: notify
+   image: alpine:latest
+   when: always
+   only:
+     - master
+     - staging
+     - dev
+   script:
+    - apk add curl jq
+    - JOB_NAME=$(curl --location -g --request GET https://gitlab.kmf.kz/api/v4/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/jobs?scope[]=failed --header "PRIVATE-TOKEN:$BBUSER_TOKEN" | jq '.[] | select(.allow_failure==false) | .name')
+    - if [ -z "$JOB_NAME" ]; then JOB_STATUS=success; else JOB_STATUS=failed; fi
+    - author=$(echo $CI_COMMIT_AUTHOR | awk -F '<' '{print $1}')
+    - 'message=$(echo -e "Runner:&#160;Gitlab\n\nbuild number:&#160;$CI_PIPELINE_IID\nrepo:&#160;<a href=\"$CI_PROJECT_URL\">$CI_PROJECT_TITLE</a>\nfailed steps:&#160;<code>$JOB_NAME</code>\n\nmessage:&#160;$CI_COMMIT_MESSAGE\n\n&#128073&#160;$CI_COMMIT_BRANCH environment\n\nCommit by:&#160;$author")'
+    - echo $message
+    - curl -sv -X POST "https://dev-svc.kmf.kz/api/tg/deployer?appName=$SERVICE_NAME&silent=false&users=$TG_USERS&status=$JOB_STATUS&queue=true&environment=qatest" -d "$message"
+
