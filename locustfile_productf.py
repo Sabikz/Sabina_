@@ -1,6 +1,9 @@
 from locust import HttpUser, task, between, events
-import os
 import config
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class UserProduct(HttpUser):
@@ -11,8 +14,8 @@ class UserProduct(HttpUser):
         self.authorization()
 
     def authorization(self):
-        login_auth = {"domainLogin": config.DOMAIN_LOGIN,
-                      "domainPswd": config.DOMAIN_PASSWORD}
+        login_auth = {"domainLogin": os.environ.get("DOMAIN_LOGIN"),
+                      "domainPswd": os.environ.get("DOMAIN_PASSWORD")}
 
         login_response = self.client.post("/api/pfact/admin/auth", json=login_auth)
 
