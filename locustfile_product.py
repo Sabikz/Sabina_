@@ -74,3 +74,4 @@ class UserProduct(HttpUser):
             print(f"Response content: {create_prod.content}")
             events.request_failure.fire(request_type="create_product", name="/api/pfact/admin/createProduct", response_time=0,
                                         response_length=0, exception=None, response=None)
+
