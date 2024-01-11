@@ -16,3 +16,6 @@ main.py
 
 #ignore .evn
 .evn
+
+#ignore locust
+locustfile_product.py
