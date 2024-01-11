@@ -1,0 +1,59 @@
+variables:
+  TG_USERS: "" #@goniolimon_callicomum
+  SERVICE_NAME: "qa.productfactory"
+  GIT_CLEAN_FLAGS: none
+  SEARCH_IMAGE: "image_result"
+  SEARCH_ERROR: "error_result"
+
+stages:
+  - requirements
+  - image_check
+  - qa_tests
+  - notify
+
+build_python_image:
+  stage: requirements
+  image: docker:git
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger"'
+      when: never
+    - changes:
+      - requirements.txt
+  services:
+    - docker:dind
+  script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD https://registry.kmf.kz/
+    - docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest .
+    - docker push registry.kmf.kz/python/python.qa.productfactory:3.10-latest;
+
+image_check:
+  stage: image_check
+  image: docker:git
+  services:
+    - docker:dind
+  script:
+    - docker search registry.kmf.kz/python/python.qa.productfactory:3.10-latest > $SEARCH_IMAGE
+    - if grep -q "python" $SEARCH_IMAGE; then echo "image already exists"; else
+        docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest . &&
+        docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD https://registry.kmf.kz/ &&
+        docker push registry.kmf.kz/python/python.qa.productfactory:3.10-latest;
+      fi
+
+prechecking_status:
+  stage: qa_tests
+  image: registry.kmf.kz/python/python.qa.productfactory:3.10-latest
+  script:
+    - pytest -s -v ./locustfile_product.py | tee $SEARCH_ERROR
+    - if grep -q "ERROR_FOR_DEVOPS" $SEARCH_ERROR; then echo "Houston, we have a problem..."; exit 1; else echo "No errors were found!"; fi
+
+#postchecking_status:
+#  stage: qa_tests
+#  image: registry.kmf.kz/python/python.qa.productfactory:3.10-latest
+#  needs: ["prechecking_status"]
+#  script:
+#    - pytest -s -v ./locustfile_product.py --html=report_acpr_ind.html --self-contained-html --capture=tee-sys | tee $SEARCH_ERROR
+#    - if grep -q "ERROR_FOR_DEVOPS" $SEARCH_ERROR; then echo "Houston, we have a problem..."; exit 1; else echo "No errors were found!"; fi
+#    - ls -la
+#    - curl -F "document=@report_acpr_ind.html" https://api.telegram.org/bot$ANDROID_EMA_BOT_TOKEN/sendDocument?chat_id=$QA_CHAT_ID
+
+
