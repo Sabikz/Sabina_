@@ -1,5 +1,4 @@
 from locust import HttpUser, task, between, events
-import config
 import os
 from dotenv import load_dotenv
 
