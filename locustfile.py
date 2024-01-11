@@ -7,7 +7,7 @@ load_dotenv()
 
 
 class UserProduct(HttpUser):
-    wait_time = between(0.00001, 0.1)
+    wait_time = between(1, 3)
     host = "https://dev-svc.kmf.kz"
 
     def on_start(self):
@@ -47,7 +47,7 @@ class UserProduct(HttpUser):
                                         response_time=0, response_length=0, exception=None, response=None)
             self.stop()
 
-    @task(100)
+    @task()
     def create_product(self):
         headers = {"Authorization": f"Bearer {self.token}"}
         req_body = {
