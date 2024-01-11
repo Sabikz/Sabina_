@@ -43,7 +43,7 @@ prechecking_status:
   stage: qa_tests
   image: registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest
   script:
-    - pytest -s -v ./test/ | tee $SEARCH_ERROR
+    - pytest -s -v ./tests/ | tee $SEARCH_ERROR
     - if grep -q "ERROR_FOR_DEVOPS" $SEARCH_ERROR; then echo "Houston, we have a problem..."; exit 1; else echo "No errors were found!"; fi
 
 #postchecking_status:
