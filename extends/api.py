@@ -1,5 +1,9 @@
 import requests as requests
 import config
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Api:
@@ -14,8 +18,8 @@ class Api:
                              "Authorization": self.token}
 
     def login(self):
-        data = {"domainLogin": config.DOMAIN_LOGIN,
-                "domainPswd": config.DOMAIN_PASSWORD}
+        data = {"domainLogin": os.environ.get("DOMAIN_LOGIN"),
+                "domainPswd": os.environ.get("DOMAIN_PASSWORD")}
         headers_type = {"Content-Type": "application/json"}
         response = requests.post("https://dev-svc.kmf.kz/api/pfact/admin/auth", headers=headers_type, json=data,
                                  verify=False)

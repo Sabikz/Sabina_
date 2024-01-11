@@ -1,0 +1,4 @@
+locustio==0.999
+pytest==7.4.4
+python-dotenv==1.0.0
+Requests==2.31.0
