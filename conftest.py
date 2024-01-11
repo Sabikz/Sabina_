@@ -40,6 +40,12 @@ def r_sm_loan():
 
 
 @pytest.fixture()
+def creditSum():
+    credit = random.randint(5000, 300000000)
+    return credit
+
+
+@pytest.fixture()
 def r_mn_loan():
     refs_Id = [1,2,3,6]
     random_refs_Id = random.choice(refs_Id)
