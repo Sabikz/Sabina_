@@ -18,6 +18,10 @@ class CommonData:
         }
 
 
+class SpecificException(Exception):
+    pass
+
+
 class ApiCreateProduct(Api):
     def create_product(self, product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
                        r_lend_kind, r_line_kind, r_sm_line, r_mn_line, r_mn_type, r_pa_mtd, r_season, r_lpg,
@@ -38,10 +42,20 @@ class ApiCreateProduct(Api):
             **CommonData.get_data(product_name),
             "selectedParams": selected_params
         }
-        response = requests.post(f"{self.host}/api/pfact/admin/createProduct", headers=self.headers_type, verify=False,
-                                 json=data)
-        return response
+        try:
+            response = requests.post(f"{self.host}/api/pfact/admin/createProduct", headers=self.headers_type,
+                                     verify=False, json=data)
+            response.raise_for_status()
 
+        except requests.exceptions.RequestException as req_exc:
+
+            raise SpecificException(f"Error in requests: {req_exc}")
+
+        except Exception as e:
+
+            raise SpecificException(f"Unexpected error: {e}")
+
+        return response
 
 
 

@@ -13,3 +13,9 @@ config.py
 
 #ignore main
 main.py
+
+#ignore .env
+env 
+
+#ignore locust
+locustfile_product.py

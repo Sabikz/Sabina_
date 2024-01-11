@@ -26,3 +26,4 @@ class Response:
             assert self.response_status == status_code, GlobalErrorMessages.WRONG_STATUS_CODE.value
         print("Response content:", self.response_content)
         return self
+

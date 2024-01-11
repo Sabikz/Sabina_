@@ -1,18 +1,20 @@
 from locust import HttpUser, task, between, events
 import os
-import config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class UserProduct(HttpUser):
-    wait_time = between(0.00001, 0.1)
+    wait_time = between(1, 3)
     host = "https://dev-svc.kmf.kz"
 
     def on_start(self):
         self.authorization()
 
     def authorization(self):
-        login_auth = {"domainLogin": config.DOMAIN_LOGIN,
-                      "domainPswd": config.DOMAIN_PASSWORD}
+        login_auth = {"domainLogin": os.environ.get("DOMAIN_LOGIN"),
+                      "domainPswd": os.environ.get("DOMAIN_PASSWORD")}
 
         login_response = self.client.post("/api/pfact/admin/auth", json=login_auth)
 
@@ -44,7 +46,7 @@ class UserProduct(HttpUser):
                                         response_time=0, response_length=0, exception=None, response=None)
             self.stop()
 
-    @task(100)
+    @task()
     def create_product(self):
         headers = {"Authorization": f"Bearer {self.token}"}
         req_body = {
@@ -72,3 +74,4 @@ class UserProduct(HttpUser):
             print(f"Response content: {create_prod.content}")
             events.request_failure.fire(request_type="create_product", name="/api/pfact/admin/createProduct", response_time=0,
                                         response_length=0, exception=None, response=None)
+
