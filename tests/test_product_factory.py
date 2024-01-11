@@ -1,11 +1,12 @@
-import pytest
-
-from extends.api_create_product import ApiCreateProduct
+from extends.api_create_product import ApiCreateProduct, SpecificException
 from baseclasses.response import Response
-from extends.api_find_product import ApiFindProduct
-
 
 import pytest
+
+
+class TestFailedError(Exception):
+    pass
+
 
 @pytest.mark.filterwarnings("ignore::urllib3.exceptions.InsecureRequestWarning")
 def test_create_product(product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
@@ -28,9 +29,14 @@ def test_create_product(product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r
             f"r_lpg: {r_lpg}, r_insur_comp: {r_insur_comp}, r_pct_loan: {r_pct_loan}, "
             f"r_pct_param: {r_pct_param}"
         )
+
+    except SpecificException as e:
+        raise TestFailedError(f"ERROR_FOR_DEVOPS: Test failed with the following error - {str(e)}")
+
     except Exception as e:
-        # Raise a custom error here
-        raise RuntimeError(f"ERROR_FOR_DEVOPS: Test failed with the following error - {str(e)}")
+
+        raise TestFailedError(f"ERROR_FOR_DEVOPS: Test failed with an unexpected error - {str(e)}")
+
 
 
 
