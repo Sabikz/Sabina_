@@ -13,3 +13,6 @@ config.py
 
 #ignore main
 main.py
+
+#ignore .evn
+.evn
