@@ -25,7 +25,7 @@ class ApiFindProduct(Api):
             "productSubTypeId": r_lpg,
             "seasonMark": seasonMark,
             "trancheNumber": trancheNumber,
-            "validSince": "10.-1.2024"
+            "validSince": "10.01.2024"
         }
         response = requests.post(f"{self.host}/api/pfact/datahandler/findProduct", headers=self.headers_type,
                                  verify=False, json=data)
