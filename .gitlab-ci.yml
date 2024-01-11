@@ -23,8 +23,8 @@ build_python_image:
     - docker:dind
   script:
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD https://registry.kmf.kz/
-    - docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest .
-    - docker push registry.kmf.kz/python/python.qa.productfactory:3.10-latest;
+    - docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest .
+    - docker push registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest;
 
 image_check:
   stage: image_check
@@ -32,23 +32,23 @@ image_check:
   services:
     - docker:dind
   script:
-    - docker search registry.kmf.kz/python/python.qa.productfactory:3.10-latest > $SEARCH_IMAGE
+    - docker search registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest > $SEARCH_IMAGE
     - if grep -q "python" $SEARCH_IMAGE; then echo "image already exists"; else
-        docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10-latest . &&
+        docker build -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest -t registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest . &&
         docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD https://registry.kmf.kz/ &&
-        docker push registry.kmf.kz/python/python.qa.productfactory:3.10-latest;
+        docker push registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest;
       fi
 
 prechecking_status:
   stage: qa_tests
-  image: registry.kmf.kz/python/python.qa.productfactory:3.10-latest
+  image: registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest
   script:
     - pytest -s -v ./locustfile_product.py | tee $SEARCH_ERROR
     - if grep -q "ERROR_FOR_DEVOPS" $SEARCH_ERROR; then echo "Houston, we have a problem..."; exit 1; else echo "No errors were found!"; fi
 
 #postchecking_status:
 #  stage: qa_tests
-#  image: registry.kmf.kz/python/python.qa.productfactory:3.10-latest
+#  image: registry.kmf.kz/python/python.qa.productfactory:3.10.10-latest
 #  needs: ["prechecking_status"]
 #  script:
 #    - pytest -s -v ./locustfile_product.py --html=report_acpr_ind.html --self-contained-html --capture=tee-sys | tee $SEARCH_ERROR
