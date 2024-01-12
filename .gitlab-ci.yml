@@ -61,9 +61,7 @@ telegram:
    image: alpine:latest
    when: always
    only:
-     - master
-     - staging
-     - dev
+     - main
    script:
     - apk add curl jq
     - JOB_NAME=$(curl --location -g --request GET https://gitlab.kmf.kz/api/v4/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/jobs?scope[]=failed --header "PRIVATE-TOKEN:$BBUSER_TOKEN" | jq '.[] | select(.allow_failure==false) | .name')
