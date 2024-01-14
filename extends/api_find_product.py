@@ -5,13 +5,13 @@ import requests
 class ApiFindProduct(Api):
     def find_product(self, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
                         r_lend_kind, r_line_kind, r_sm_line, r_mn_line, r_pa_mtd, seasonMark, r_lpg,
-                        r_insur_comp, trancheNumber, creditSum):
+                        r_insur_comp, trancheNumber, r_sm_loan_amount_mapping):
 
         data = {
             "channelId": r_channel,
             "clientTypeId": r_cl_type,
             "creditPurposeId": r_lpur,
-            "creditSum": creditSum,
+            "creditSum": r_sm_loan_amount_mapping,
             "creditTerm": r_mn_loan,
             "currencyId": r_currency,
             "firmId": r_firm,
