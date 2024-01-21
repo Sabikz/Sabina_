@@ -26,7 +26,6 @@ class ApiCreateProduct(Api):
     def create_product(self, product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
                        r_lend_kind, r_line_kind, r_sm_line, r_mn_line, r_mn_type, r_pa_mtd, r_season, r_lpg,
                        r_insur_comp, r_pct_loan, r_pct_param):
-
         selected_params = [
             {"paramId": param_id, "refsId": [ref_id]}
             for param_id, ref_id in [
@@ -37,7 +36,6 @@ class ApiCreateProduct(Api):
                 (15, r_pct_loan), (14, r_pct_param)
             ]
         ]
-
         data = {
             **CommonData.get_data(product_name),
             "selectedParams": selected_params
@@ -48,14 +46,41 @@ class ApiCreateProduct(Api):
             response.raise_for_status()
 
         except requests.exceptions.RequestException as req_exc:
-
+            handler = SpecificExceptionHandler()
+            handler.handle_exception(req_exc)
             raise SpecificException(f"Error in requests: {req_exc}")
 
         except Exception as e:
-
+            handler = DefaultExceptionHandler()
+            handler.handle_exception(e)
             raise SpecificException(f"Unexpected error: {e}")
 
         return response
 
 
+class ApiCreateProductFactory:
+    def create_api_create_product(self):
+        return ApiCreateProduct()
 
+
+class ExceptionHandlerStrategy:
+    def handle_exception(self, exception):
+        pass
+
+
+class SpecificExceptionHandler(ExceptionHandlerStrategy):
+    def handle_exception(self, exception):
+        print(f"Handling specific exception: {exception}")
+
+
+class DefaultExceptionHandler(ExceptionHandlerStrategy):
+    def handle_exception(self, exception):
+        print(f"Handling default exception: {exception}")
+
+
+class ApiFacade:
+    def __init__(self, api):
+        self.api = api
+
+    def create_product(self, product_name, *args, **kwargs):
+        return self.api.create_product(product_name, *args, **kwargs)

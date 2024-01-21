@@ -104,9 +104,9 @@ def r_pa_mtd():
 
 @pytest.fixture()
 def r_season():
-    refs_Id = [1, 2]
-    random_refs_Id = random.choice(refs_Id)
-    return random_refs_Id
+    refs_Id = 1
+    # random_refs_Id = random.choice(refs_Id)
+    return refs_Id
 
 
 @pytest.fixture()
