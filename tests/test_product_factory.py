@@ -36,3 +36,4 @@ class TestCreateProduct:
 
         except Exception as e:
             raise TestFailedError(f"ERROR_FOR_DEVOPS: Test failed with an unexpected error - {str(e)}")
+

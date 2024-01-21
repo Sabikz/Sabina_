@@ -84,3 +84,4 @@ class ApiFacade:
 
     def create_product(self, product_name, *args, **kwargs):
         return self.api.create_product(product_name, *args, **kwargs)
+
