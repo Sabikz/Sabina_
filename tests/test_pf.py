@@ -1,6 +1,5 @@
-from extends.api_create_product import ApiCreateProduct, SpecificException
-from baseclasses.response import Response
-from extends.api_find_product import ApiFindProduct
+from extends_.create_product import *
+from baseclasses.responses import Response
 import pytest
 import allure
 
@@ -41,17 +40,3 @@ def test_create_product(product_name, r_cl_type, r_channel, r_lpur, r_sm_loan, r
     except Exception as e:
 
         raise TestFailedError(f"ERROR_FOR_DEVOPS: Test failed with an unexpected error - {str(e)}")
-
-
-# @pytest.mark.filterwarnings("ignore::urllib3.exceptions.InsecureRequestWarning")
-# def test_find_product(r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
-#                         r_lend_kind, r_line_kind, r_sm_line, r_mn_line,  r_pa_mtd, seasonMark, r_lpg,
-#                         r_insur_comp, creditSum, trancheNumber):
-#
-#     find_product = ApiFindProduct().find_product(r_cl_type, r_channel, r_lpur, r_sm_loan, r_mn_loan, r_currency, r_firm,
-#                         r_lend_kind, r_line_kind, r_sm_line, r_mn_line, r_pa_mtd, seasonMark, r_lpg,
-#                         r_insur_comp, creditSum, trancheNumber)
-#     response_data = find_product
-#     response = Response(response_data)
-#     print("Response content:", response.response_json)
-#     response.assert_status_code(200)

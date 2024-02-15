@@ -1,4 +1,4 @@
-from extends.api import Api
+from extends_.api import Api
 import requests
 
 
